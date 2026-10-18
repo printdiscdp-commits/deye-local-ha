@@ -54,7 +54,7 @@ class ModbusPushServer:
 
     async def _on_connect(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
         peer = writer.get_extra_info("peername")
-        _LOGGER.info("Deye logger connected from %s", peer)
+        _LOGGER.warning("deye_local: inbound connection accepted from %s", peer)
         if self._writer and not self._writer.is_closing():
             # Replace a stale connection with the fresh one.
             self._writer.close()
