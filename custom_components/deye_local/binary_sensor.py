@@ -26,5 +26,12 @@ class DeyeConnectedSensor(CoordinatorEntity, BinarySensorEntity):
         )
 
     @property
+    def available(self) -> bool:
+        # This diagnostic entity must stay available even when the data
+        # coordinator's update fails (e.g. "waiting for logger to connect"),
+        # otherwise it can never show the disconnected state.
+        return True
+
+    @property
     def is_on(self) -> bool:
         return self.coordinator.server.connected

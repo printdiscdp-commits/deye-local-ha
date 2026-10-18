@@ -49,7 +49,16 @@ class DeyeCoordinator(DataUpdateCoordinator):
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     coordinator = DeyeCoordinator(hass, entry)
-    await coordinator.server.start()
+    _LOGGER.warning(
+        "deye_local: starting push listener on %s:%s (slave=%s)",
+        entry.data[CONF_LISTEN_HOST], entry.data[CONF_LISTEN_PORT], entry.data[CONF_SLAVE],
+    )
+    try:
+        await coordinator.server.start()
+    except OSError as err:
+        _LOGGER.error("deye_local: failed to start listener: %s", err)
+        raise
+    _LOGGER.warning("deye_local: listener started OK")
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
     await coordinator.async_refresh()  # don't block setup if logger hasn't connected yet
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
