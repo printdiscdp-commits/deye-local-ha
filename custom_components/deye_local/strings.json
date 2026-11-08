@@ -2,17 +2,16 @@
   "config": {
     "step": {
       "user": {
-        "title": "Deye (Solarman logger)",
+        "title": "Deye (local web API)",
         "data": {
-          "host": "IP address of logger",
-          "serial": "Logger serial number",
-          "port": "Port",
-          "slave": "Modbus slave ID",
+          "host": "Logger IP address",
+          "username": "Web UI username",
+          "password": "Web UI password",
           "interval": "Poll interval (s)"
         }
       }
     },
-    "error": { "cannot_connect": "Cannot connect to logger" },
+    "error": { "cannot_connect": "Cannot connect to logger (check IP/username/password)", "unknown": "Unexpected error" },
     "abort": { "already_configured": "Already configured" }
   }
 }

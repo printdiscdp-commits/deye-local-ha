@@ -4,7 +4,7 @@ from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import CONF_SERIAL, DOMAIN, SENSORS
+from .const import DOMAIN, SENSORS
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
@@ -17,8 +17,8 @@ class DeyeSensor(CoordinatorEntity, SensorEntity):
 
     def __init__(self, coordinator, entry, spec):
         super().__init__(coordinator)
-        key, name, _r, _s, _sg, _o, unit, dev_class, state_class = spec
-        serial = entry.data[CONF_SERIAL]
+        key, name, _info_key, unit, dev_class, state_class = spec
+        serial = coordinator.data.get("serial") if coordinator.data else entry.unique_id
         self._key = key
         self._attr_name = name
         self._attr_unique_id = f"{serial}_{key}"

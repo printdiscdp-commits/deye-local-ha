@@ -1,10 +1,10 @@
 {
   "domain": "deye_local",
-  "name": "Deye Local (Solarman V5)",
-  "version": "1.0.0",
+  "name": "Deye Local (HTTP)",
+  "version": "2.0.0",
   "config_flow": true,
-  "documentation": "https://github.com/",
+  "documentation": "https://github.com/printdiscdp-commits/deye-local-ha",
   "iot_class": "local_polling",
-  "requirements": [],
+  "requirements": ["pycryptodome>=3.19.0"],
   "codeowners": []
 }
