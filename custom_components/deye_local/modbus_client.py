@@ -93,18 +93,29 @@ def _read_block(host: str, port: int, serial: int, seq: int, slave: int, addr: i
         sock.close()
 
     header = bytes([slave, 0x03])
+    byte_count_expected = qty * 2
+    fallback_data = None
     idx = buf.find(header)
     while idx != -1:
         if idx + 3 <= len(buf):
             byte_count = buf[idx + 2]
             data_start = idx + 3
             data_end = data_start + byte_count
-            if byte_count == qty * 2 and data_end + 2 <= len(buf):
+            if byte_count == byte_count_expected and data_end <= len(buf):
                 data = buf[data_start:data_end]
-                crc_recv = struct.unpack("<H", buf[data_end:data_end + 2])[0]
-                if _crc16(header + bytes([byte_count]) + data) == crc_recv:
-                    return struct.unpack(">" + "H" * qty, data)
+                if data_end + 2 <= len(buf):
+                    crc_recv = struct.unpack("<H", buf[data_end:data_end + 2])[0]
+                    if _crc16(header + bytes([byte_count]) + data) == crc_recv:
+                        return struct.unpack(">" + "H" * qty, data)
+                elif fallback_data is None:
+                    # This logger frequently omits the trailing Modbus CRC
+                    # entirely (the TCP stream just ends right after the data
+                    # bytes). Keep this as a fallback only used if no
+                    # CRC-verified match is found anywhere in the buffer.
+                    fallback_data = data
         idx = buf.find(header, idx + 1)
+    if fallback_data is not None:
+        return struct.unpack(">" + "H" * qty, fallback_data)
     raise ModbusError(f"no valid Modbus response for addr={addr} qty={qty} (got {len(buf)} bytes)")
 
 
