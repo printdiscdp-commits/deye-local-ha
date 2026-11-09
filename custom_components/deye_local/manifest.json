@@ -1,7 +1,7 @@
 {
   "domain": "deye_local",
   "name": "Deye Local (HTTP + Modbus)",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "config_flow": true,
   "documentation": "https://github.com/printdiscdp-commits/deye-local-ha",
   "iot_class": "local_polling",

@@ -109,8 +109,8 @@ def _read_block(host: str, port: int, serial: int, seq: int, slave: int, addr: i
 
 
 def read_battery_and_grid(host: str, serial: int, port: int = 8899,
-                           connect_timeout: float = 10.0, read_timeout: float = 20.0,
-                           quiet_time: float = 2.5) -> dict:
+                           connect_timeout: float = 10.0, read_timeout: float = 40.0,
+                           quiet_time: float = 9.0) -> dict:
     """Read battery + grid/load registers. Blocking; takes roughly 15-40s total."""
     result: dict[str, float] = {}
 
